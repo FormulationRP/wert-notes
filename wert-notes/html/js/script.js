@@ -49,7 +49,7 @@ function saveevent() {
             $.post('https://wert-notes/new-note', JSON.stringify({text: yazi}));
         }
     } else {
-        $.post('https://wert-notes/notify', JSON.stringify({notif: "Boş sayfa kayıt edemezsin!"}));
+        $.post('https://wert-notes/notify', JSON.stringify({ notif: "You cannot register a blank page!"}));
     }
 }
 
@@ -57,7 +57,7 @@ function deleteevent() {
     if (currentId != undefined) {
         $.post('https://wert-notes/delete-note', JSON.stringify({id: currentId}));
     } else {
-        $.post('https://wert-notes/notify', JSON.stringify({notif: "Bu sayfayı yırtıp atamazsın!"}));
+        $.post('https://wert-notes/notify', JSON.stringify({ notif: "You can't tear up this page!"}));
     }
 }
 
@@ -65,6 +65,6 @@ function shareevent() {
     if (currentId != undefined) {
         $.post('https://wert-notes/share-note', JSON.stringify({id: currentId}));
     } else {
-        $.post('https://wert-notes/notify', JSON.stringify({notif: "Bu sayfayı paylaşamazsın!"}));
+        $.post('https://wert-notes/notify', JSON.stringify({ notif: "You cannot share this page!"}));
     }
 }
