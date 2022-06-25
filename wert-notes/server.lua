@@ -4,7 +4,7 @@ TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 QBCore.Functions.CreateCallback('wert-notes:get-my-notes', function(source, cb)
     local ply = ESX.GetPlayerFromId(source)
     if ply then
-        local result = MySQL.query.await('SELECT * FROM notepad WHERE citizenid = ?', {ply.PlayerData.citizenid})
+        local result = MySQL.query.await('SELECT * FROM notepad WHERE identifier = ?', {ply.PlayerData.identifier})
         if result and result[1] then
             cb(result)
         else
@@ -19,8 +19,8 @@ RegisterNetEvent("wert-notes:server:new-note", function(text)
     local src = source
     local ply = ESX.GetPlayerFromId(source)
     if ply and text then
-        MySQL.Async.fetchAll("INSERT INTO notepad SET citizenid = @citizenid, text = @text", {
-            ["@citizenid"] = ply.PlayerData.citizenid,
+        MySQL.Async.fetchAll("INSERT INTO notepad SET identifier = @identifier, text = @text", {
+            ["@identifier"] = ply.PlayerData.identifier,
             ["@text"] = text,
         })
     end
@@ -48,8 +48,8 @@ RegisterNetEvent("wert-notes:server:share-note", function(id, text, playerId)
     local ply = ESX.GetPlayerFromId(src)
     local trgt = ESX.GetPlayerFromId(playerId)
     if ply and trgt and id and text then
-        MySQL.Async.fetchAll("INSERT INTO notepad SET citizenid = @citizenid, text = @text", {
-            ["@citizenid"] = trgt.PlayerData.citizenid,
+        MySQL.Async.fetchAll("INSERT INTO notepad SET identifier = @identifier, text = @text", {
+            ["@identifier"] = trgt.PlayerData.identifier,
             ["@text"] = text,
         })
         TriggerClientEvent("form_core:Notify", ply.PlayerData.source, "success", " You gave your #" .. id .. " numbered note to the nearby player!",10000)
