@@ -1,7 +1,7 @@
 ESX = nil
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
-QBCore.Functions.CreateCallback('wert-notes:get-my-notes', function(source, cb)
+ESX.RegisterServerCallback('wert-notes:get-my-notes', function(source, cb)
     local ply = ESX.GetPlayerFromId(source)
     if ply then
         local result = MySQL.query.await('SELECT * FROM notepad WHERE identifier = ?', {ply.PlayerData.identifier})
@@ -57,7 +57,7 @@ RegisterNetEvent("wert-notes:server:share-note", function(id, text, playerId)
     end
 end)
 
-QBCore.Functions.CreateUseableItem("stickynote", function(source, item)
+ESX.RegisterUsableItem("stickynote", function(source, item)
     local src = source
     TriggerClientEvent("wert-notes:client:use-item", src)
 end)
