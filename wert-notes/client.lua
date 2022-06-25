@@ -1,4 +1,12 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+ESX = nil
+
+Citizen.CreateThread(function()
+  while ESX == nil do
+    TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+    Citizen.Wait(31)
+  end
+end)
+
 local noteActive = false
 local PlayerProps = {}
 
@@ -60,6 +68,7 @@ RegisterNetEvent("wert-notes:client:use-item", function()
     end
 end)
 
+--build from ox lib
 
 RegisterNetEvent("wert-notes:client:open-menu", function()
     local Menu = {
@@ -110,7 +119,7 @@ RegisterNetEvent("wert-notes:client:select-action", function(data)
         })
         SetNuiFocus(true, true)
     elseif type == "mynotes" then
-        QBCore.Functions.TriggerCallback('wert-notes:get-my-notes', function(result)
+        ESX.TriggerServerCallback()('wert-notes:get-my-notes', function(result)
             if result then
                 local Menu = {
                     {
@@ -148,7 +157,7 @@ RegisterNetEvent("wert-notes:client:select-action", function(data)
                 exports['qb-menu']:openMenu(Menu)
             else
                 fullclose()
-                QBCore.Functions.Notify('You dont have any saved note!', 'error')
+                exports['form_core']:Notify('error','You dont have any saved note!',10000)
             end
         end)
     end
@@ -206,11 +215,11 @@ RegisterNUICallback("share-note", function(data)
             local playerId = GetPlayerServerId(player)
             TriggerServerEvent("wert-notes:server:share-note", tonumber(data.id), tostring(data.text), playerId)
         else
-            QBCore.Functions.Notify("No player by closest", "error")
+            exports['form_core']:Notify('error','No one nearby',10000)
         end
     end
 end)
 
 RegisterNUICallback("notify", function(data)
-    QBCore.Functions.Notify(data.notif, "error")
+    exports['form_core']:Notify('error',data.notif,10000)
 end)
